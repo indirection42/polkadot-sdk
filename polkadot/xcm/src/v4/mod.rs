@@ -372,6 +372,10 @@ impl TryFrom<NewResponse> for Response {
 			},
 			DispatchResult(maybe_error) =>
 				Self::DispatchResult(maybe_error.try_into().map_err(|_| ())?),
+			XcqResult(_) => {
+				log::debug!(target: "xcm::versions::v5tov4", "`{new:?}` not supported by v4");
+				return Err(());
+			},
 		})
 	}
 }
@@ -1443,7 +1447,8 @@ impl<Call: Decode + GetDispatchInfo> TryFrom<NewInstruction<Call>> for Instructi
 			InitiateTransfer { .. } |
 			PayFees { .. } |
 			SetHints { .. } |
-			ExecuteWithOrigin { .. } => {
+			ExecuteWithOrigin { .. } |
+			ReportQuery { .. } => {
 				log::debug!(target: "xcm::versions::v5tov4", "`{new_instruction:?}` not supported by v4");
 				return Err(());
 			},
