@@ -143,3 +143,6 @@ mod weight;
 pub use weight::{
 	FixedRateOfFungible, FixedWeightBounds, TakeRevenue, UsingComponents, WeightInfoBounds,
 };
+
+mod xcq;
+pub use xcq::XcqExecutor;

@@ -1678,6 +1678,38 @@ impl<Config: config::Config> XcmExecutor<Config> {
 				Config::TransactionalProcessor::process(|| {
 					Config::HrmpChannelClosingHandler::handle(initiator, sender, recipient)
 				}),
+			ReportQuery { query, max_weight, info } => {
+				// TODO: currently we have no way to estimate the weight of the query
+				// let weight = Config::XcqExecutor::estimate_weight(query);
+				// if !weight.all_lte(require_weight_at_most) {
+				// 	log::trace!(
+				// 		target: "xcm::process_instruction::report_query",
+				// 		"Max {weight} bigger than require at most {max_weight}",
+				// 	);
+
+				// 	return Err(XcmError::MaxWeightInvalid)
+				// }
+
+				let (query_result, maybe_actual_weight) = Config::XcqExecutor::execute(query);
+				let actual_weight = maybe_actual_weight.unwrap_or(weight);
+				let surplus = weight.saturating_sub(actual_weight);
+				// We assume that the `Config::Weigher` will counts the `max_weight`
+				// for the estimate of how much weight this instruction will take. Now that we know
+				// that it's less, we credit it.
+				//
+				// We make the adjustment for the total surplus, which is used eventually
+				// reported back to the caller and this ensures that they account for the total
+				// weight consumed correctly (potentially allowing them to do more operations in a
+				// block than they otherwise would).
+				self.total_surplus.saturating_accrue(surplus);
+				self.respond(
+					self.cloned_origin(),
+					Response::XcqResult(query_result),
+					info,
+					FeeReason::Report,
+				)?;
+				Ok(())
+			},
 		}
 	}
 

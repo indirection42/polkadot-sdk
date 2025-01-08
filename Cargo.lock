@@ -7033,6 +7033,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "fortuples"
+version = "0.9.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "87630a8087e9cac4b7edfb6ee5e250ddca9112b57b6b17d8f5107375a3a8eace"
+dependencies = [
+ "proc-macro2 1.0.82",
+ "quote 1.0.35",
+ "syn 1.0.109",
+]
+
+[[package]]
 name = "forwarded-header-value"
 version = "0.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -19773,6 +19784,7 @@ dependencies = [
 
 [[package]]
 name = "polkavm"
+<<<<<<< HEAD
 version = "0.10.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b7ec0c5935f2eff23cfc4653002f4f8d12b37f87a720e0631282d188c32089d6"
@@ -19795,6 +19807,15 @@ dependencies = [
  "polkavm-assembler 0.18.0",
  "polkavm-common 0.18.0",
  "polkavm-linux-raw 0.18.0",
+=======
+version = "0.12.0"
+dependencies = [
+ "libc",
+ "log",
+ "polkavm-assembler 0.12.0",
+ "polkavm-common 0.12.0",
+ "polkavm-linux-raw 0.12.0",
+>>>>>>> 4c72b9baaf1 (add ReportQuery instruction)
 ]
 
 [[package]]
@@ -19808,6 +19829,7 @@ dependencies = [
 
 [[package]]
 name = "polkavm-assembler"
+<<<<<<< HEAD
 version = "0.10.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d8e4fd5a43100bf1afe9727b8130d01f966f5cfc9144d5604b21e795c2bcd80e"
@@ -19820,6 +19842,9 @@ name = "polkavm-assembler"
 version = "0.18.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "eaad38dc420bfed79e6f731471c973ce5ff5e47ab403e63cf40358fef8a6368f"
+=======
+version = "0.12.0"
+>>>>>>> 4c72b9baaf1 (add ReportQuery instruction)
 dependencies = [
  "log",
 ]
@@ -19835,6 +19860,7 @@ dependencies = [
 
 [[package]]
 name = "polkavm-common"
+<<<<<<< HEAD
 version = "0.10.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0097b48bc0bedf9f3f537ce8f37e8f1202d8d83f9b621bdb21ff2c59b9097c50"
@@ -19851,6 +19877,12 @@ checksum = "31ff33982a807d8567645d4784b9b5d7ab87bcb494f534a57cadd9012688e102"
 dependencies = [
  "log",
  "polkavm-assembler 0.18.0",
+=======
+version = "0.12.0"
+dependencies = [
+ "log",
+ "polkavm-assembler 0.12.0",
+>>>>>>> 4c72b9baaf1 (add ReportQuery instruction)
 ]
 
 [[package]]
@@ -19887,6 +19919,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "5c4fdfc49717fb9a196e74a5d28e0bc764eb394a2c803eb11133a31ac996c60c"
 dependencies = [
  "polkavm-common 0.9.0",
+<<<<<<< HEAD
  "proc-macro2 1.0.86",
  "quote 1.0.37",
  "syn 2.0.87",
@@ -19914,6 +19947,11 @@ dependencies = [
  "proc-macro2 1.0.86",
  "quote 1.0.37",
  "syn 2.0.87",
+=======
+ "proc-macro2 1.0.82",
+ "quote 1.0.35",
+ "syn 2.0.61",
+>>>>>>> 4c72b9baaf1 (add ReportQuery instruction)
 ]
 
 [[package]]
@@ -19957,6 +19995,7 @@ dependencies = [
  "log",
  "object 0.32.2",
  "polkavm-common 0.9.0",
+<<<<<<< HEAD
  "regalloc2 0.9.3",
  "rustc-demangle",
 ]
@@ -19988,6 +20027,8 @@ dependencies = [
  "log",
  "object 0.36.1",
  "polkavm-common 0.18.0",
+=======
+>>>>>>> 4c72b9baaf1 (add ReportQuery instruction)
  "regalloc2 0.9.3",
  "rustc-demangle",
 ]
@@ -20000,6 +20041,7 @@ checksum = "26e85d3456948e650dff0cfc85603915847faf893ed1e66b020bb82ef4557120"
 
 [[package]]
 name = "polkavm-linux-raw"
+<<<<<<< HEAD
 version = "0.10.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "26e45fa59c7e1bb12ef5289080601e9ec9b31435f6e32800a5c90c132453d126"
@@ -20009,6 +20051,9 @@ name = "polkavm-linux-raw"
 version = "0.18.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "23eff02c070c70f31878a3d915e88a914ecf3e153741e2fb572dde28cce20fde"
+=======
+version = "0.12.0"
+>>>>>>> 4c72b9baaf1 (add ReportQuery instruction)
 
 [[package]]
 name = "polling"
@@ -22692,9 +22737,15 @@ dependencies = [
 name = "sc-executor-common"
 version = "0.29.0"
 dependencies = [
+<<<<<<< HEAD
  "polkavm 0.18.0",
  "sc-allocator 23.0.0",
  "sp-maybe-compressed-blob 11.0.0",
+=======
+ "polkavm 0.9.3",
+ "sc-allocator",
+ "sp-maybe-compressed-blob",
+>>>>>>> 4c72b9baaf1 (add ReportQuery instruction)
  "sp-wasm-interface 20.0.0",
  "thiserror",
  "wasm-instrument",
@@ -22733,8 +22784,13 @@ name = "sc-executor-polkavm"
 version = "0.29.0"
 dependencies = [
  "log",
+<<<<<<< HEAD
  "polkavm 0.18.0",
  "sc-executor-common 0.29.0",
+=======
+ "polkavm 0.9.3",
+ "sc-executor-common",
+>>>>>>> 4c72b9baaf1 (add ReportQuery instruction)
  "sp-wasm-interface 20.0.0",
 ]
 
@@ -27927,6 +27983,7 @@ dependencies = [
  "polkadot-test-runtime",
  "primitive-types 0.13.1",
  "scale-info",
+<<<<<<< HEAD
  "sp-arithmetic 23.0.0",
  "sp-core 28.0.0",
  "sp-io 30.0.0",
@@ -27957,6 +28014,16 @@ dependencies = [
  "sp-weights 31.0.0",
  "staging-xcm 14.2.0",
  "staging-xcm-executor 17.0.0",
+=======
+ "sp-arithmetic",
+ "sp-io",
+ "sp-runtime",
+ "sp-std 14.0.0",
+ "sp-weights",
+ "staging-xcm",
+ "staging-xcm-executor",
+ "xcq-extension",
+>>>>>>> 4c72b9baaf1 (add ReportQuery instruction)
 ]
 
 [[package]]
@@ -31659,6 +31726,70 @@ dependencies = [
  "staging-xcm-builder 7.0.0",
  "staging-xcm-executor 7.0.0",
  "xcm-simulator 7.0.0",
+]
+
+[[package]]
+name = "xcq-api"
+version = "0.1.0"
+dependencies = [
+ "xcq-api-procedural",
+]
+
+[[package]]
+name = "xcq-api-procedural"
+version = "0.1.0"
+dependencies = [
+ "Inflector",
+ "parity-scale-codec",
+ "proc-macro-crate 3.1.0",
+ "proc-macro2 1.0.82",
+ "quote 1.0.35",
+ "scale-info",
+ "syn 2.0.61",
+]
+
+[[package]]
+name = "xcq-executor"
+version = "0.1.0"
+dependencies = [
+ "polkavm 0.12.0",
+ "tracing",
+ "xcq-api",
+ "xcq-primitives",
+]
+
+[[package]]
+name = "xcq-extension"
+version = "0.1.0"
+dependencies = [
+ "fortuples",
+ "parity-scale-codec",
+ "polkavm 0.12.0",
+ "scale-info",
+ "tracing",
+ "xcq-executor",
+ "xcq-extension-procedural",
+ "xcq-primitives",
+]
+
+[[package]]
+name = "xcq-extension-procedural"
+version = "0.1.0"
+dependencies = [
+ "Inflector",
+ "proc-macro-crate 3.1.0",
+ "proc-macro2 1.0.82",
+ "quote 1.0.35",
+ "syn 2.0.61",
+ "twox-hash",
+]
+
+[[package]]
+name = "xcq-primitives"
+version = "0.1.0"
+dependencies = [
+ "parity-scale-codec",
+ "scale-info",
 ]
 
 [[package]]

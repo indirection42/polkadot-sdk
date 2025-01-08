@@ -39,8 +39,13 @@ pallet-xcm = { workspace = true, default-features = true }
 polkadot-primitives = { workspace = true, default-features = true }
 polkadot-runtime-parachains = { workspace = true, default-features = true }
 polkadot-test-runtime = { workspace = true }
-primitive-types = { features = ["codec", "num-traits", "scale-info"], workspace = true }
+primitive-types = { features = [
+	"codec",
+	"num-traits",
+	"scale-info",
+], workspace = true }
 sp-core = { workspace = true, default-features = true }
+xcq-extension = { workspace = true }
 
 [features]
 default = ["std"]
@@ -77,4 +82,5 @@ std = [
 	"sp-weights/std",
 	"xcm-executor/std",
 	"xcm/std",
+	"xcq-extension/std",
 ]
