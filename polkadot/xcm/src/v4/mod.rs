@@ -309,8 +309,6 @@ pub enum Response {
 	PalletsInfo(BoundedVec<PalletInfo, MaxPalletsInfo>),
 	/// The status of a dispatch attempt using `Transact`.
 	DispatchResult(MaybeErrorCode),
-	/// The result of an XCQ
-	XcqResult(Vec<u8>),
 }
 
 impl Default for Response {
@@ -370,6 +368,10 @@ impl TryFrom<NewResponse> for Response {
 			},
 			DispatchResult(maybe_error) =>
 				Self::DispatchResult(maybe_error.try_into().map_err(|_| ())?),
+			XcqResult(_) => {
+				log::debug!(target: "xcm::versions::v5tov4", "`{new:?}` not supported by v4");
+				return Err(());
+			},
 		})
 	}
 }
@@ -1103,19 +1105,6 @@ pub enum Instruction<Call> {
 	///
 	/// Errors: If the given origin is `Some` and not equal to the current Origin register.
 	UnpaidExecution { weight_limit: WeightLimit, check_origin: Option<Location> },
-
-	/// Send a `QueryResponse` message containing the result of the XCQ to some destination.
-	///
-	/// - `query`: The XCQ to report.
-	/// - `max_weight`: The maximum weight of the query that consumes.
-	/// - `info`: The information needed for constructing and sending the `QueryResponse` message.
-	///
-	/// Safety: No concerns.
-	///
-	/// Kind: *Command*
-	///
-	/// Errors: *Fallible*.
-	ReportQuery { query: SizeLimitedXcq, max_weight: Weight, info: QueryResponseInfo },
 }
 
 impl<Call> Xcm<Call> {
@@ -1193,7 +1182,6 @@ impl<Call> Instruction<Call> {
 			AliasOrigin(location) => AliasOrigin(location),
 			UnpaidExecution { weight_limit, check_origin } =>
 				UnpaidExecution { weight_limit, check_origin },
-			ReportQuery { query, max_weight, info } => ReportQuery { query, max_weight, info },
 		}
 	}
 }
@@ -1263,7 +1251,6 @@ impl<Call, W: XcmWeightInfo<Call>> GetWeight<W> for Instruction<Call> {
 			AliasOrigin(location) => W::alias_origin(location),
 			UnpaidExecution { weight_limit, check_origin } =>
 				W::unpaid_execution(weight_limit, check_origin),
-			ReportQuery { query, max_weight, info } => W::report_query(query, max_weight, info),
 		}
 	}
 }
@@ -1455,7 +1442,8 @@ impl<Call: Decode + GetDispatchInfo> TryFrom<NewInstruction<Call>> for Instructi
 			InitiateTransfer { .. } |
 			PayFees { .. } |
 			SetHints { .. } |
-			ExecuteWithOrigin { .. } => {
+			ExecuteWithOrigin { .. } |
+			ReportQuery { .. } => {
 				log::debug!(target: "xcm::versions::v5tov4", "`{new_instruction:?}` not supported by v4");
 				return Err(());
 			},
