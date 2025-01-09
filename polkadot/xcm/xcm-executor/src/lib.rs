@@ -1680,9 +1680,10 @@ impl<Config: config::Config> XcmExecutor<Config> {
 					Config::HrmpChannelClosingHandler::handle(initiator, sender, recipient)
 				}),
 			ReportQuery { query, max_weight, info } => {
-				// max_weight is provided to executor to limit the weight usage of the query.
-				let (query_result, maybe_actual_weight) = Config::XcqExecutor::execute(query, max_weight);
-				// If we cannot get the actual weight from the executor, we use the max weight.
+				// `max_weight` is provided to executor to limit the weight usage of the query.
+				// We may get   the actual weight used from the executor.
+				let (query_result, maybe_actual_weight) = Config::XcqExecutor::execute(query, max_weight)?;
+				// If we cannot get the actual weight from the executor, we assume `max_weight` is used.
 				let actual_weight = maybe_actual_weight.unwrap_or(max_weight);
 				let surplus = max_weight.saturating_sub(actual_weight);
 				// We assume that the `Config::Weigher` will counts the `max_weight`
