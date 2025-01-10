@@ -143,3 +143,4 @@ mod weight;
 pub use weight::{
 	FixedRateOfFungible, FixedWeightBounds, TakeRevenue, UsingComponents, WeightInfoBounds,
 };
+
