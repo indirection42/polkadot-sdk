@@ -145,4 +145,4 @@ pub use weight::{
 };
 
 mod xcq;
-pub use xcq::XcqExecutor;
+pub use xcq::XcqExecutorWithoutWeightInfo;
