@@ -45,7 +45,6 @@ primitive-types = { features = [
 	"scale-info",
 ], workspace = true }
 sp-core = { workspace = true, default-features = true }
-xcq-extension = { workspace = true }
 
 [features]
 default = ["std"]
@@ -82,5 +81,4 @@ std = [
 	"sp-weights/std",
 	"xcm-executor/std",
 	"xcm/std",
-	"xcq-extension/std",
 ]

@@ -7033,17 +7033,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "fortuples"
-version = "0.9.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "87630a8087e9cac4b7edfb6ee5e250ddca9112b57b6b17d8f5107375a3a8eace"
-dependencies = [
- "proc-macro2 1.0.86",
- "quote 1.0.37",
- "syn 1.0.109",
-]
-
-[[package]]
 name = "forwarded-header-value"
 version = "0.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -19797,17 +19786,6 @@ dependencies = [
 
 [[package]]
 name = "polkavm"
-version = "0.12.0"
-dependencies = [
- "libc",
- "log",
- "polkavm-assembler 0.12.0",
- "polkavm-common 0.12.0",
- "polkavm-linux-raw 0.12.0",
-]
-
-[[package]]
-name = "polkavm"
 version = "0.18.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "dd044ab1d3b11567ab6b98ca71259a992b4034220d5972988a0e96518e5d343d"
@@ -19839,13 +19817,6 @@ dependencies = [
 
 [[package]]
 name = "polkavm-assembler"
-version = "0.12.0"
-dependencies = [
- "log",
-]
-
-[[package]]
-name = "polkavm-assembler"
 version = "0.18.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "eaad38dc420bfed79e6f731471c973ce5ff5e47ab403e63cf40358fef8a6368f"
@@ -19870,14 +19841,6 @@ checksum = "0097b48bc0bedf9f3f537ce8f37e8f1202d8d83f9b621bdb21ff2c59b9097c50"
 dependencies = [
  "log",
  "polkavm-assembler 0.10.0",
-]
-
-[[package]]
-name = "polkavm-common"
-version = "0.12.0"
-dependencies = [
- "log",
- "polkavm-assembler 0.12.0",
 ]
 
 [[package]]
@@ -20040,10 +20003,6 @@ name = "polkavm-linux-raw"
 version = "0.10.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "26e45fa59c7e1bb12ef5289080601e9ec9b31435f6e32800a5c90c132453d126"
-
-[[package]]
-name = "polkavm-linux-raw"
-version = "0.12.0"
 
 [[package]]
 name = "polkavm-linux-raw"
@@ -27975,7 +27934,6 @@ dependencies = [
  "sp-weights 27.0.0",
  "staging-xcm 7.0.0",
  "staging-xcm-executor 7.0.0",
- "xcq-extension",
 ]
 
 [[package]]
@@ -31701,70 +31659,6 @@ dependencies = [
  "staging-xcm-builder 7.0.0",
  "staging-xcm-executor 7.0.0",
  "xcm-simulator 7.0.0",
-]
-
-[[package]]
-name = "xcq-api"
-version = "0.1.0"
-dependencies = [
- "xcq-api-procedural",
-]
-
-[[package]]
-name = "xcq-api-procedural"
-version = "0.1.0"
-dependencies = [
- "Inflector",
- "parity-scale-codec",
- "proc-macro-crate 3.1.0",
- "proc-macro2 1.0.86",
- "quote 1.0.37",
- "scale-info",
- "syn 2.0.87",
-]
-
-[[package]]
-name = "xcq-executor"
-version = "0.1.0"
-dependencies = [
- "polkavm 0.12.0",
- "tracing",
- "xcq-api",
- "xcq-primitives",
-]
-
-[[package]]
-name = "xcq-extension"
-version = "0.1.0"
-dependencies = [
- "fortuples",
- "parity-scale-codec",
- "polkavm 0.12.0",
- "scale-info",
- "tracing",
- "xcq-executor",
- "xcq-extension-procedural",
- "xcq-primitives",
-]
-
-[[package]]
-name = "xcq-extension-procedural"
-version = "0.1.0"
-dependencies = [
- "Inflector",
- "proc-macro-crate 3.1.0",
- "proc-macro2 1.0.86",
- "quote 1.0.37",
- "syn 2.0.87",
- "twox-hash",
-]
-
-[[package]]
-name = "xcq-primitives"
-version = "0.1.0"
-dependencies = [
- "parity-scale-codec",
- "scale-info",
 ]
 
 [[package]]
