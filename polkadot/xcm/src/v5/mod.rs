@@ -77,7 +77,7 @@ impl<Call> Decode for Xcm<Call> {
 			instructions_count::with(|count| {
 				*count = count.saturating_add(number_of_instructions as u8);
 				if *count > MAX_INSTRUCTIONS_TO_DECODE {
-					return Err(CodecError::from("Max instructions exceeded"))
+					return Err(CodecError::from("Max instructions exceeded"));
 				}
 				Ok(())
 			})
@@ -228,6 +228,11 @@ parameter_types! {
 	pub MaxPalletsInfo: u32 = 64;
 }
 
+parameter_types! {
+	pub MaxPvqSize: u32 = 2 * 1024 * 1024;
+	pub MaxPvqResult: u32 = 1024;
+}
+
 #[derive(
 	Clone, Eq, PartialEq, Encode, Decode, DecodeWithMemTracking, Debug, TypeInfo, MaxEncodedLen,
 )]
@@ -293,6 +298,8 @@ pub enum Response {
 	PalletsInfo(BoundedVec<PalletInfo, MaxPalletsInfo>),
 	/// The status of a dispatch attempt using `Transact`.
 	DispatchResult(MaybeErrorCode),
+	/// The result of an PvQ
+	PvqResult(BoundedVec<u8, MaxPvqResult>),
 }
 
 impl Default for Response {
@@ -1144,6 +1151,19 @@ pub enum Instruction<Call> {
 	/// - `hints`: A bounded vector of `ExecutionHint`, specifying the different hints that will
 	/// be activated.
 	SetHints { hints: BoundedVec<Hint, HintNumVariants> },
+
+	/// Send a `QueryResponse` message containing the result of the XCQ to some destination.
+	///
+	/// - `query`: The XCQ to report.
+	/// - `max_weight`: The maximum weight of the query that consumes.
+	/// - `info`: The information needed for constructing and sending the `QueryResponse` message.
+	///
+	/// Safety: No concerns.
+	///
+	/// Kind: *Command*
+	///
+	/// Errors: *Fallible*.
+	ReportQuery { query: BoundedVec<u8, MaxPvqSize>, max_weight: Weight, info: QueryResponseInfo },
 }
 
 #[derive(
@@ -1246,6 +1266,7 @@ impl<Call> Instruction<Call> {
 				InitiateTransfer { destination, remote_fees, preserve_origin, assets, remote_xcm },
 			ExecuteWithOrigin { descendant_origin, xcm } =>
 				ExecuteWithOrigin { descendant_origin, xcm: xcm.into() },
+			ReportQuery { query, max_weight, info } => ReportQuery { query, max_weight, info },
 		}
 	}
 }
@@ -1321,6 +1342,7 @@ impl<Call, W: XcmWeightInfo<Call>> GetWeight<W> for Instruction<Call> {
 				W::initiate_transfer(destination, remote_fees, preserve_origin, assets, remote_xcm),
 			ExecuteWithOrigin { descendant_origin, xcm } =>
 				W::execute_with_origin(descendant_origin, xcm),
+			ReportQuery { query, max_weight, info } => W::report_query(query, max_weight, info),
 		}
 	}
 }

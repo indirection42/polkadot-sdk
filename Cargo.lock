@@ -7097,6 +7097,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "fortuples"
+version = "0.9.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "87630a8087e9cac4b7edfb6ee5e250ddca9112b57b6b17d8f5107375a3a8eace"
+dependencies = [
+ "proc-macro2 1.0.93",
+ "quote 1.0.38",
+ "syn 1.0.109",
+]
+
+[[package]]
 name = "forwarded-header-value"
 version = "0.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -14921,8 +14932,8 @@ dependencies = [
  "pallet-utility 28.0.0",
  "parity-scale-codec",
  "paste",
- "polkavm 0.21.0",
- "polkavm-common 0.21.0",
+ "polkavm 0.21.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "polkavm-common 0.21.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "pretty_assertions",
  "rlp 0.6.1",
  "scale-info",
@@ -20055,14 +20066,25 @@ dependencies = [
 [[package]]
 name = "polkavm"
 version = "0.21.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "cfd34e2f74206fff33482ae1718e275f11365ef8c4de7f0e69217f8845303867"
 dependencies = [
  "libc",
  "log",
  "polkavm-assembler 0.21.0",
  "polkavm-common 0.21.0",
  "polkavm-linux-raw 0.21.0",
+]
+
+[[package]]
+name = "polkavm"
+version = "0.21.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "cfd34e2f74206fff33482ae1718e275f11365ef8c4de7f0e69217f8845303867"
+dependencies = [
+ "libc",
+ "log",
+ "polkavm-assembler 0.21.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "polkavm-common 0.21.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "polkavm-linux-raw 0.21.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -20088,6 +20110,13 @@ name = "polkavm-assembler"
 version = "0.18.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "eaad38dc420bfed79e6f731471c973ce5ff5e47ab403e63cf40358fef8a6368f"
+dependencies = [
+ "log",
+]
+
+[[package]]
+name = "polkavm-assembler"
+version = "0.21.0"
 dependencies = [
  "log",
 ]
@@ -20133,12 +20162,20 @@ dependencies = [
 [[package]]
 name = "polkavm-common"
 version = "0.21.0"
+dependencies = [
+ "log",
+ "polkavm-assembler 0.21.0",
+]
+
+[[package]]
+name = "polkavm-common"
+version = "0.21.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "5c16b809cfd398f861261c045a8745e6c78b71ea7e0d3ef6f7cc553eb27bc17e"
 dependencies = [
  "blake3",
  "log",
- "polkavm-assembler 0.21.0",
+ "polkavm-assembler 0.21.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -20203,9 +20240,9 @@ dependencies = [
 
 [[package]]
 name = "polkavm-derive-impl"
-version = "0.18.0"
+version = "0.18.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "12d2840cc62a0550156b1676fed8392271ddf2fab4a00661db56231424674624"
+checksum = "2f2116a92e6e96220a398930f4c8a6cda1264206f3e2034fc9982bfd93f261f7"
 dependencies = [
  "polkavm-common 0.18.0",
  "proc-macro2 1.0.93",
@@ -20219,7 +20256,7 @@ version = "0.21.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "24fd6c6215450c3e57511df5c38a82eb4bde208de15ee15046ac33852f3c3eaa"
 dependencies = [
- "polkavm-common 0.21.0",
+ "polkavm-common 0.21.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "proc-macro2 1.0.93",
  "quote 1.0.38",
  "syn 2.0.98",
@@ -20251,7 +20288,7 @@ version = "0.18.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "48c16669ddc7433e34c1007d31080b80901e3e8e523cb9d4b441c3910cf9294b"
 dependencies = [
- "polkavm-derive-impl 0.18.0",
+ "polkavm-derive-impl 0.18.1",
  "syn 2.0.98",
 ]
 
@@ -20322,7 +20359,7 @@ dependencies = [
  "hashbrown 0.14.5",
  "log",
  "object 0.36.1",
- "polkavm-common 0.21.0",
+ "polkavm-common 0.21.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "regalloc2 0.9.3",
  "rustc-demangle",
 ]
@@ -20344,6 +20381,10 @@ name = "polkavm-linux-raw"
 version = "0.18.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "23eff02c070c70f31878a3d915e88a914ecf3e153741e2fb572dde28cce20fde"
+
+[[package]]
+name = "polkavm-linux-raw"
+version = "0.21.0"
 
 [[package]]
 name = "polkavm-linux-raw"
@@ -20873,6 +20914,83 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "5787f7cda34e3033a72192c018bc5883100330f362ef279a8cbccfce8bb4e874"
 dependencies = [
  "cc",
+]
+
+[[package]]
+name = "pvq-executor"
+version = "0.1.0"
+dependencies = [
+ "polkavm 0.21.0",
+ "pvq-primitives",
+ "tracing",
+]
+
+[[package]]
+name = "pvq-extension"
+version = "0.1.0"
+dependencies = [
+ "fortuples",
+ "parity-scale-codec",
+ "polkavm 0.21.0",
+ "pvq-executor",
+ "pvq-extension-procedural",
+ "pvq-primitives",
+ "scale-info",
+ "tracing",
+]
+
+[[package]]
+name = "pvq-extension-core"
+version = "0.1.0"
+dependencies = [
+ "parity-scale-codec",
+ "pvq-extension",
+ "scale-info",
+]
+
+[[package]]
+name = "pvq-extension-fungibles"
+version = "0.1.0"
+dependencies = [
+ "parity-scale-codec",
+ "pvq-extension",
+ "scale-info",
+]
+
+[[package]]
+name = "pvq-extension-procedural"
+version = "0.1.0"
+dependencies = [
+ "proc-macro-crate 3.1.0",
+ "proc-macro2 1.0.93",
+ "quote 1.0.38",
+ "syn 2.0.98",
+ "twox-hash",
+]
+
+[[package]]
+name = "pvq-primitives"
+version = "0.1.0"
+dependencies = [
+ "parity-scale-codec",
+ "scale-info",
+]
+
+[[package]]
+name = "pvq-test-runner"
+version = "0.1.0"
+dependencies = [
+ "clap 4.5.13",
+ "parity-scale-codec",
+ "polkavm 0.21.0",
+ "pvq-executor",
+ "pvq-extension",
+ "pvq-extension-core",
+ "pvq-extension-fungibles",
+ "pvq-primitives",
+ "scale-info",
+ "tracing",
+ "tracing-subscriber 0.3.18",
 ]
 
 [[package]]
@@ -28560,6 +28678,9 @@ dependencies = [
  "polkadot-runtime-parachains 7.0.0",
  "polkadot-test-runtime",
  "primitive-types 0.13.1",
+ "pvq-extension",
+ "pvq-primitives",
+ "pvq-test-runner",
  "scale-info",
  "sp-arithmetic 23.0.0",
  "sp-core 28.0.0",
@@ -28602,6 +28723,7 @@ dependencies = [
  "frame-support 28.0.0",
  "impl-trait-for-tuples",
  "parity-scale-codec",
+ "pvq-primitives",
  "scale-info",
  "sp-arithmetic 23.0.0",
  "sp-core 28.0.0",
