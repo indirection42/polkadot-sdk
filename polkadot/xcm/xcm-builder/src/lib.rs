@@ -147,3 +147,6 @@ mod weight;
 pub use weight::{
 	FixedRateOfFungible, FixedWeightBounds, TakeRevenue, UsingComponents, WeightInfoBounds,
 };
+
+mod execute_pvq;
+pub use execute_pvq::TestPvqExecutor;

@@ -17,8 +17,8 @@
 use crate::*;
 
 use codec::Encode;
-use frame_support::{assert_ok, weights::Weight};
-use xcm::latest::QueryResponseInfo;
+use frame_support::{assert_ok, weights::Weight, BoundedVec};
+use xcm::latest::{MaxPvqSize, QueryResponseInfo};
 use xcm_simulator::{mock_message_queue::ReceivedDmp, TestExt};
 
 // Helper function for forming buy execution message
@@ -569,6 +569,47 @@ fn query_holding() {
 				max_weight: Weight::from_parts(1_000_000_000, 1024 * 1024),
 				querier: Some(Here.into()),
 			}])],
+		);
+	});
+}
+
+#[test]
+fn report_query() {
+	MockNet::reset();
+
+	let query_id = 1234;
+	let max_weight = Weight::from_parts(1_000_000_000, 1024 * 1024);
+
+	let program = include_bytes!("../../../../../../../output/guest-sum-balance.polkavm").to_vec();
+
+	let mut input_data = vec![];
+	input_data.extend_from_slice(&0u32.encode());
+	input_data.extend_from_slice(&vec![[0u8; 32], [1u8; 32]].encode());
+
+	let query: BoundedVec<u8, MaxPvqSize> =
+		(program, input_data).encode().try_into().expect("query too large");
+
+	// Parachain A sends a query to Relay chain
+	ParaA::execute_with(|| {
+		let message = Xcm(vec![ReportQuery {
+			query,
+			max_weight,
+			info: QueryResponseInfo { destination: Parachain(1).into(), query_id, max_weight },
+		}]);
+		assert_ok!(ParachainPalletXcm::send_xcm(Here, Parent, message));
+	});
+
+	// Parachain A receives the query response
+	ParaA::execute_with(|| {
+		let result = 200u64.encode().try_into().expect("result too large");
+		assert_eq!(
+			ReceivedDmp::<parachain::Runtime>::get(),
+			vec![Xcm(vec![QueryResponse {
+				query_id,
+				response: Response::PvqResult(result),
+				max_weight,
+				querier: Some(Here.into()),
+			}])]
 		);
 	});
 }

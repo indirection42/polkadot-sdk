@@ -25,6 +25,7 @@ sp-runtime = { workspace = true }
 sp-weights = { workspace = true }
 tracing = { workspace = true }
 xcm = { workspace = true }
+pvq-primitives = { workspace = true }
 
 [features]
 default = ["std"]
