@@ -1,5 +1,8 @@
+use alloc::vec::Vec;
 use codec::{Decode, Encode};
-use pvq_extension::{CallDataTuple, ExtensionsExecutor, InvokeSource, PermissionController};
+use pvq_extension::{
+	extensions_impl, CallDataTuple, ExtensionsExecutor, InvokeSource, PermissionController,
+};
 use pvq_primitives::PvqError;
 use xcm::prelude::*;
 use xcm_executor::traits::{ExecutePvq, GasWeightConverter};
@@ -20,8 +23,36 @@ impl GasWeightConverter for TestGasWeightConverter {
 	}
 }
 
+#[extensions_impl]
+pub mod extensions {
+	use codec::Decode;
+	#[extensions_impl::impl_struct]
+	pub struct ExtensionsImpl;
+
+	#[extensions_impl::extension]
+	impl pvq_extension_core::extension::ExtensionCore for ExtensionsImpl {
+		type ExtensionId = u64;
+		fn has_extension(id: Self::ExtensionId) -> bool {
+			matches!(id, 0 | 1)
+		}
+	}
+
+	#[extensions_impl::extension]
+	impl pvq_extension_fungibles::extension::ExtensionFungibles for ExtensionsImpl {
+		type AssetId = u32;
+		type AccountId = [u8; 32];
+		type Balance = u64;
+		fn total_supply(_asset: Self::AssetId) -> Self::Balance {
+			100
+		}
+		fn balance(_asset: Self::AssetId, _who: Self::AccountId) -> Self::Balance {
+			100
+		}
+	}
+}
+
 pub type TestPvqExecutor =
-	ExecutorWithoutRefund<pvq_test_runner::extensions::Extensions, (), TestGasWeightConverter>;
+	ExecutorWithoutRefund<extensions::Extensions, (), TestGasWeightConverter>;
 
 impl<E: CallDataTuple, P: PermissionController, C: GasWeightConverter> ExecutePvq
 	for ExecutorWithoutRefund<E, P, C>

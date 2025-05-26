@@ -58,7 +58,7 @@ use xcm_builder::{
 	SiblingParachainAsNative, SiblingParachainConvertsVia, SignedAccountId32AsNative,
 	SignedToAccountId32, SingleAssetExchangeAdapter, SovereignPaidRemoteExporter,
 	SovereignSignedViaLocation, StartsWith, StartsWithExplicitGlobalConsensus, TakeWeightCredit,
-	TrailingSetTopicAsId, UsingComponents, WeightInfoBounds, WithComputedOrigin,
+	TestPvqExecutor, TrailingSetTopicAsId, UsingComponents, WeightInfoBounds, WithComputedOrigin,
 	WithLatestLocationConverter, WithUniqueTopic, XcmFeeManagerFromComponents,
 };
 use xcm_executor::XcmExecutor;
@@ -476,6 +476,7 @@ impl xcm_executor::Config for XcmConfig {
 	type HrmpChannelAcceptedHandler = ();
 	type HrmpChannelClosingHandler = ();
 	type XcmRecorder = PolkadotXcm;
+	type PvqExecutor = TestPvqExecutor;
 }
 
 /// Converts a local signed origin into an XCM location. Forms the basis for local origins

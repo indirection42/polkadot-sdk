@@ -1,3 +1,5 @@
+#[cfg(not(feature = "std"))]
+use scale_info::prelude::vec::Vec;
 use xcm::latest::prelude::*;
 
 pub trait ExecutePvq {

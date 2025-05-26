@@ -274,4 +274,12 @@ impl<Call> XcmWeightInfo<Call> for AssetHubWestendXcmWeight<Call> {
 	fn execute_with_origin(_: &Option<InteriorLocation>, _: &Xcm<Call>) -> Weight {
 		XcmGeneric::<Runtime>::execute_with_origin()
 	}
+	fn report_query(
+		_query: &BoundedVec<u8, MaxPvqSize>,
+		_max_weight: &Weight,
+		_info: &QueryResponseInfo,
+	) -> Weight {
+		// TODO: optimize this to use correct weight
+		Weight::MAX
+	}
 }

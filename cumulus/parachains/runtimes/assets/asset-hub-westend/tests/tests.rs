@@ -960,6 +960,90 @@ fn test_assets_balances_api_works() {
 }
 
 #[test]
+fn test_pvq_api_works() {
+	use pvq_runtime_api::runtime_decl_for_pvq_api::PvqApi;
+	ExtBuilder::<Runtime>::default()
+		.with_tracing()
+		.with_collators(vec![AccountId::from(ALICE)])
+		.with_session_keys(vec![(
+			AccountId::from(ALICE),
+			AccountId::from(ALICE),
+			SessionKeys { aura: AuraId::from(sp_core::sr25519::Public::from_raw(ALICE)) },
+		)])
+		.build()
+		.execute_with(|| {
+			let bob: AccountId = SOME_ASSET_ADMIN.into();
+			let staking_pot = CollatorSelection::account_id();
+			let native_location = WestendLocation::get();
+			let asset_1: u32 = 1;
+			let asset_1_location =
+				AssetIdForTrustBackedAssetsConvert::convert_back(&asset_1).unwrap();
+
+			// bob's initial balance for native and `asset1` assets.
+			let initial_balance = 200 * UNITS;
+			// liquidity for both arms of (native, asset1) pool.
+			let native_liquidity = 100 * UNITS;
+			let asset_1_liquidity = 50 * UNITS;
+
+			// init asset, balances and pool.
+			assert_ok!(<Assets as Create<_>>::create(
+				asset_1,
+				bob.clone(),
+				true,
+				ExistentialDeposit::get()
+			));
+
+			assert_ok!(Assets::mint_into(asset_1, &bob, initial_balance));
+			assert_ok!(Balances::mint_into(&bob, initial_balance));
+			assert_ok!(Balances::mint_into(&staking_pot, initial_balance));
+
+			assert_ok!(AssetConversion::create_pool(
+				RuntimeHelper::origin_of(bob.clone()),
+				Box::new(
+					xcm::v5::Location::try_from(native_location.clone()).expect("conversion works")
+				),
+				Box::new(
+					xcm::v5::Location::try_from(asset_1_location.clone())
+						.expect("conversion works")
+				),
+			));
+
+			assert_ok!(AssetConversion::add_liquidity(
+				RuntimeHelper::origin_of(bob.clone()),
+				Box::new(
+					xcm::v5::Location::try_from(native_location.clone()).expect("conversion works")
+				),
+				Box::new(
+					xcm::v5::Location::try_from(asset_1_location.clone())
+						.expect("conversion works")
+				),
+				native_liquidity,
+				asset_1_liquidity,
+				1,
+				1,
+				bob,
+			));
+
+			// Run PVQ query to get pool reserves.
+			let program =
+				include_bytes!("../../../../../../../../output/guest-test-swap-extension.polkavm");
+
+			let args = (native_location.encode(), asset_1_location.encode()).encode();
+
+			let result: Vec<u8> =
+				Runtime::execute_query(program.to_vec(), args, None).expect("Ok result");
+
+			let (native_reserve, asset1_reserve) =
+				Option::<(Balance, Balance)>::decode(&mut &result[..])
+					.expect("Decodes successfully")
+					.expect("Pool exists");
+
+			assert_eq!(native_reserve, native_liquidity);
+			assert_eq!(asset1_reserve, asset_1_liquidity);
+		});
+}
+
+#[test]
 fn authorized_aliases_work() {
 	ExtBuilder::<Runtime>::default()
 		.with_tracing()

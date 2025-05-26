@@ -186,7 +186,7 @@ pub mod prelude {
 			InteriorLocation,
 			Junction::{self, *},
 			Junctions::{self, Here},
-			Location, MaxAssetTransferFilters, MaybeErrorCode,
+			Location, MaxAssetTransferFilters, MaxPvqResult, MaxPvqSize, MaybeErrorCode,
 			NetworkId::{self, *},
 			OriginKind, Outcome, PalletInfo, Parent, ParentThen, PreparedMessage, QueryId,
 			QueryResponseInfo, Reanchorable, Response, Result as XcmResult, SendError, SendResult,
