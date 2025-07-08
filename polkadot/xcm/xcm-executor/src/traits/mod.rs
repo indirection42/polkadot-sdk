@@ -55,6 +55,8 @@ mod weight;
 pub use event_emitter::EventEmitter;
 
 pub use record_xcm::RecordXcm;
+mod execute_pvq;
+pub use execute_pvq::{ExecutePvq, GasWeightConverter};
 #[deprecated = "Use `sp_runtime::traits::` instead"]
 pub use sp_runtime::traits::{Identity, TryConvertInto as JustTry};
 pub use weight::{WeightBounds, WeightTrader};

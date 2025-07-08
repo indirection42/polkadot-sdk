@@ -16,7 +16,7 @@
 
 use crate::traits::{
 	AssetExchange, AssetLock, CallDispatcher, ClaimAssets, ConvertOrigin, DropAssets, EventEmitter,
-	ExportXcm, FeeManager, HandleHrmpChannelAccepted, HandleHrmpChannelClosing,
+	ExecutePvq, ExportXcm, FeeManager, HandleHrmpChannelAccepted, HandleHrmpChannelClosing,
 	HandleHrmpNewChannelOpenRequest, OnResponse, ProcessTransaction, RecordXcm, ShouldExecute,
 	TransactAsset, VersionChangeNotifier, WeightBounds, WeightTrader,
 };
@@ -125,6 +125,8 @@ pub trait Config {
 
 	/// Transactional processor for XCM instructions.
 	type TransactionalProcessor: ProcessTransaction;
+	/// Executor for PVQ instructions.
+	type PvqExecutor: ExecutePvq;
 
 	/// Allows optional logic execution for the `HrmpNewChannelOpenRequest` XCM notification.
 	type HrmpNewChannelOpenRequestHandler: HandleHrmpNewChannelOpenRequest;

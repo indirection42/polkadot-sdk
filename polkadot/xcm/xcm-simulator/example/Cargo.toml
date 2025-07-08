@@ -30,7 +30,9 @@ polkadot-parachain-primitives.default-features = true
 polkadot-parachain-primitives.workspace = true
 polkadot-runtime-parachains.default-features = true
 polkadot-runtime-parachains.workspace = true
-scale-info = { features = ["derive"], workspace = true, default-features = true }
+scale-info = { features = [
+	"derive",
+], workspace = true, default-features = true }
 sp-core.default-features = true
 sp-core.workspace = true
 sp-io.default-features = true
@@ -47,6 +49,9 @@ xcm-simulator.default-features = true
 xcm-simulator.workspace = true
 xcm.default-features = true
 xcm.workspace = true
+pvq-extension.workspace = true
+pvq-extension-core.workspace = true
+pvq-extension-fungibles.workspace = true
 
 [features]
 default = []
@@ -66,4 +71,6 @@ runtime-benchmarks = [
 ]
 
 [dev-dependencies]
-sp-tracing = { features = ["test-utils"], default-features = false, workspace = true }
+sp-tracing = { features = [
+	"test-utils",
+], default-features = false, workspace = true }

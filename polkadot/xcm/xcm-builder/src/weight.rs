@@ -67,6 +67,7 @@ impl<T: Get<Weight>, C: Decode + GetDispatchInfo, M> FixedWeightBounds<T, C, M> 
 			Transact { ref mut call, .. } => call.ensure_decoded()?.get_dispatch_info().call_weight,
 			SetErrorHandler(xcm) | SetAppendix(xcm) | ExecuteWithOrigin { xcm, .. } =>
 				Self::weight_with_limit(xcm, instrs_limit)?,
+			ReportQuery { max_weight, .. } => *max_weight,
 			_ => Weight::zero(),
 		};
 		T::get().checked_add(&instr_weight).ok_or(())
@@ -114,6 +115,7 @@ where
 	) -> Result<Weight, ()> {
 		let instr_weight = match instruction {
 			Transact { ref mut call, .. } => call.ensure_decoded()?.get_dispatch_info().call_weight,
+			ReportQuery { max_weight, .. } => *max_weight,
 			SetErrorHandler(xcm) | SetAppendix(xcm) => Self::weight_with_limit(xcm, instrs_limit)?,
 			_ => Weight::zero(),
 		};

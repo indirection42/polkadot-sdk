@@ -34,10 +34,10 @@ use xcm::latest::{prelude::*, AssetTransferFilter};
 pub mod traits;
 use traits::{
 	validate_export, AssetExchange, AssetLock, CallDispatcher, ClaimAssets, ConvertOrigin,
-	DropAssets, Enact, EventEmitter, ExportXcm, FeeManager, FeeReason, HandleHrmpChannelAccepted,
-	HandleHrmpChannelClosing, HandleHrmpNewChannelOpenRequest, OnResponse, ProcessTransaction,
-	Properties, ShouldExecute, TransactAsset, VersionChangeNotifier, WeightBounds, WeightTrader,
-	XcmAssetTransfers,
+	DropAssets, Enact, EventEmitter, ExecutePvq, ExportXcm, FeeManager, FeeReason,
+	HandleHrmpChannelAccepted, HandleHrmpChannelClosing, HandleHrmpNewChannelOpenRequest,
+	OnResponse, ProcessTransaction, Properties, ShouldExecute, TransactAsset,
+	VersionChangeNotifier, WeightBounds, WeightTrader, XcmAssetTransfers,
 };
 
 pub use traits::RecordXcm;
@@ -100,6 +100,7 @@ pub struct XcmExecutor<Config: config::Config> {
 	message_weight: Weight,
 	asset_claimer: Option<Location>,
 	already_paid_fees: bool,
+	pvq_executor: Config::PvqExecutor,
 	_config: PhantomData<Config>,
 }
 
@@ -372,6 +373,7 @@ impl<Config: config::Config> XcmExecutor<Config> {
 			message_weight: Weight::zero(),
 			asset_claimer: None,
 			already_paid_fees: false,
+			pvq_executor: Config::PvqExecutor::new(),
 			_config: PhantomData,
 		}
 	}
@@ -1726,6 +1728,34 @@ impl<Config: config::Config> XcmExecutor<Config> {
 				Config::TransactionalProcessor::process(|| {
 					Config::HrmpChannelClosingHandler::handle(initiator, sender, recipient)
 				}),
+			ReportQuery { query, max_weight, info } => {
+				// `max_weight` is provided to executor to limit the weight usage of the query.
+				// We may get the actual weight used from the executor.
+				let (query_result, maybe_actual_weight) = self.pvq_executor.execute(query.into(), max_weight);
+
+				// If we cannot get the actual weight from the executor, we assume `max_weight` is used.
+				let actual_weight = maybe_actual_weight.unwrap_or(max_weight);
+				let surplus = max_weight.saturating_sub(actual_weight);
+				// We assume that the `Config::Weigher` will counts the `max_weight`
+				// for the estimate of how much weight this instruction will take. Now that we know
+				// that it's less, we credit it.
+				//
+				// We make the adjustment for the total surplus, which is used eventually
+				// reported back to the caller and this ensures that they account for the total
+				// weight consumed correctly (potentially allowing them to do more operations in a
+				// block than they otherwise would).
+				self.total_surplus.saturating_accrue(surplus);
+
+				let query_result = query_result?.try_into().map_err(|_| XcmError::Overflow)?;
+
+				self.respond(
+					self.cloned_origin(),
+					Response::PvqResult(query_result),
+					info,
+					FeeReason::Report,
+				)?;
+				Ok(())
+			},
 		}
 	}
 

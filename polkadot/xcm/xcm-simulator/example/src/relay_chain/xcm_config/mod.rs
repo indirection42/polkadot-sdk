@@ -19,12 +19,17 @@ pub mod barrier;
 pub mod constants;
 pub mod location_converter;
 pub mod origin_converter;
+pub mod pvq;
 pub mod teleporter;
 pub mod weigher;
 
-use crate::relay_chain::{RuntimeCall, XcmPallet};
+use crate::{
+	relay_chain::{RuntimeCall, XcmPallet},
+};
 use frame_support::traits::{Everything, Nothing};
-use xcm_builder::{EnsureDecodableXcm, FixedRateOfFungible, FrameTransactionalProcessor};
+use xcm_builder::{
+	EnsureDecodableXcm, FixedRateOfFungible, FrameTransactionalProcessor, TestPvqExecutor,
+};
 use xcm_executor::Config;
 
 // Generated from `decl_test_network!`
@@ -62,4 +67,5 @@ impl Config for XcmConfig {
 	type HrmpChannelAcceptedHandler = ();
 	type HrmpChannelClosingHandler = ();
 	type XcmRecorder = XcmPallet;
+	type PvqExecutor = TestPvqExecutor<pvq::extensions::Extensions>;
 }

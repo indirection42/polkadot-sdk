@@ -19,13 +19,16 @@ pub mod barrier;
 pub mod constants;
 pub mod location_converter;
 pub mod origin_converter;
+pub mod pvq;
 pub mod reserve;
 pub mod teleporter;
 pub mod weigher;
 
 use crate::parachain::{MsgQueue, PolkadotXcm, RuntimeCall};
 use frame_support::traits::{Everything, Nothing};
-use xcm_builder::{EnsureDecodableXcm, FixedRateOfFungible, FrameTransactionalProcessor};
+use xcm_builder::{
+	EnsureDecodableXcm, FixedRateOfFungible, FrameTransactionalProcessor, TestPvqExecutor,
+};
 
 // Generated from `decl_test_network!`
 pub type XcmRouter = EnsureDecodableXcm<crate::ParachainXcmRouter<MsgQueue>>;
@@ -62,4 +65,5 @@ impl xcm_executor::Config for XcmConfig {
 	type HrmpChannelAcceptedHandler = ();
 	type HrmpChannelClosingHandler = ();
 	type XcmRecorder = PolkadotXcm;
+	type PvqExecutor = TestPvqExecutor<pvq::extensions::Extensions>;
 }
