@@ -1427,10 +1427,10 @@ zeroize = { version = "1.7.0", default-features = false }
 zombienet-sdk = { version = "0.2.29" }
 zstd = { version = "0.12.4", default-features = false }
 
-pvq-primitives = { git = "https://github.com/open-web3-stack/PVQ", tag = "deps-stable2503-6", default-features = false }
-pvq-extension = { git = "https://github.com/open-web3-stack/PVQ", tag = "deps-stable2503-6", default-features = false }
-pvq-extension-core = { git = "https://github.com/open-web3-stack/PVQ", tag = "deps-stable2503-6", default-features = false }
-pvq-extension-fungibles = { git = "https://github.com/open-web3-stack/PVQ", tag = "deps-stable2503-6", default-features = false }
+pvq-primitives = { git = "https://github.com/open-web3-stack/PVQ", branch = "master", default-features = false }
+pvq-extension = { git = "https://github.com/open-web3-stack/PVQ", branch = "master", default-features = false }
+pvq-extension-core = { git = "https://github.com/open-web3-stack/PVQ", branch = "master", default-features = false }
+pvq-extension-fungibles = { git = "https://github.com/open-web3-stack/PVQ", branch = "master", default-features = false }
 
 [profile.release]
 # Polkadot runtime requires unwinding.
