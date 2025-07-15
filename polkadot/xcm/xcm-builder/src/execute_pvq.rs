@@ -43,6 +43,9 @@ impl<E: CallDataTuple, P: PermissionController, C: GasWeightConverter> ExecutePv
 			self.executor.execute(&program, &args, Some(C::weight_to_gas(max_weight)));
 		let result = match result {
 			Ok(result) => Ok(result),
+			#[cfg(feature = "std")]
+			Err(e) => Ok(e.encode()),
+			#[cfg(not(feature = "std"))]
 			Err(e) => match e {
 				PvqError::FailedToDecode => Err(XcmError::FailedToDecode),
 				PvqError::InvalidPvqProgramFormat => Err(XcmError::FailedToDecode),
