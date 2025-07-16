@@ -1,3 +1,4 @@
+use alloc::vec::Vec;
 use codec::{Decode, Encode};
 use pvq_extension::{CallDataTuple, ExtensionsExecutor, InvokeSource, PermissionController};
 use pvq_primitives::PvqError;
