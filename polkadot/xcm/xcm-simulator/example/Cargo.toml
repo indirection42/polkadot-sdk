@@ -49,9 +49,14 @@ xcm-simulator.default-features = true
 xcm-simulator.workspace = true
 xcm.default-features = true
 xcm.workspace = true
+pvq-extension.default-features = true
 pvq-extension.workspace = true
+pvq-extension-core.default-features = true
 pvq-extension-core.workspace = true
+pvq-extension-fungibles.default-features = true
 pvq-extension-fungibles.workspace = true
+pvq-primitives.default-features = true
+pvq-primitives.workspace = true
 
 [features]
 default = []
