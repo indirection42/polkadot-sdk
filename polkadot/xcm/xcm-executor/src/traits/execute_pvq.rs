@@ -1,3 +1,4 @@
+use alloc::vec::Vec;
 use xcm::latest::prelude::*;
 
 pub trait ExecutePvq {
