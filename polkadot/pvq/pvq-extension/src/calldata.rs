@@ -5,25 +5,36 @@ use scale_info::prelude::vec::Vec;
 /// The type for extension identifiers.
 pub type ExtensionIdTy = u64;
 
-/// A trait for identifying extensions.
+/// Identifies an extension by a numeric ID.
+///
+/// In practice, this is implemented for macro-generated call types and the ID is derived from the
+/// extension interface (so changing the trait's signature changes the ID).
 pub trait ExtensionId {
-    /// The unique identifier of the extension.
-    const EXTENSION_ID: ExtensionIdTy;
+	/// The unique identifier of the extension.
+	const EXTENSION_ID: ExtensionIdTy;
 }
 
-/// A trait for dispatching extension calls.
+/// Dispatches an already-decoded extension call.
+///
+/// Implementations typically:
+/// - call into the host implementation (e.g. your runtime), and
+/// - return the SCALE-encoded return value as raw bytes.
 pub trait Dispatchable {
-    /// Dispatches the extension call.
-    fn dispatch(self) -> Result<Vec<u8>, DispatchError>;
+	/// Dispatches the extension call.
+	fn dispatch(self) -> Result<Vec<u8>, DispatchError>;
 }
 
 /// The error type for dispatch operations.
 #[derive(Debug)]
 #[cfg_attr(feature = "std", derive(thiserror::Error))]
 pub enum DispatchError {
-    /// A phantom data error.
-    #[cfg_attr(feature = "std", error("PhantomData"))]
-    PhantomData,
+	/// A marker/placeholder variant was dispatched.
+	///
+	/// The extension-decl macro generates an internal `__marker(PhantomData<Impl>)` enum variant
+	/// to keep the implementation type in the call enum. That variant is `#[doc(hidden)]` and is
+	/// not meant to ever be constructed from real call data.
+	#[cfg_attr(feature = "std", error("PhantomData"))]
+	PhantomData,
 }
 
 /// A trait for extension call data.

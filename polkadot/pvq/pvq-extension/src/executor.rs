@@ -19,9 +19,7 @@ pub struct ExtensionsExecutor<C: CallDataTuple, P: PermissionController> {
 impl<C: CallDataTuple, P: PermissionController> ExtensionsExecutor<C, P> {
     /// Creates a new extensions executor.
     ///
-    /// # Arguments
-    ///
-    /// * `source`: The source of the invocation.
+    /// `source` is forwarded to the [`PermissionController`] when handling `host_call`.
     pub fn new(source: InvokeSource) -> Self {
         let context = Context::<C, P>::new(source);
         let executor = PvqExecutor::new(Default::default(), context);
@@ -30,16 +28,19 @@ impl<C: CallDataTuple, P: PermissionController> ExtensionsExecutor<C, P> {
 
     /// Executes a program with the given arguments and gas limit.
     ///
-    /// # Arguments
-    ///
-    /// * `program`: The program to execute.
-    /// * `args`: The arguments to pass to the program.
-    /// * `gas_limit`: The gas limit for the execution.
+    /// - `program`: PVQ bytecode/program.
+    /// - `args`: raw argument bytes passed through to the PVQ program.
+    /// - `gas_limit`: optional gas limit (PVQ rules).
     ///
     /// # Returns
     ///
-    /// A tuple containing the result of the execution and the remaining gas.
-    pub fn execute(&mut self, program: &[u8], args: &[u8], gas_limit: Option<i64>) -> (PvqResult, Option<i64>) {
+    /// A tuple containing the PVQ result and the remaining gas (if gas metering is enabled).
+    pub fn execute(
+        &mut self,
+        program: &[u8],
+        args: &[u8],
+        gas_limit: Option<i64>,
+    ) -> (PvqResult, Option<i64>) {
         let (result, gas_remaining) = self.executor.execute(program, args, gas_limit);
         tracing::info!("result: {:?}", result);
         (result.map_err(PvqError::from), gas_remaining)

@@ -1,4 +1,11 @@
 use std::collections::HashSet;
+
+/// Returns the list of Cargo features that are active for the current build.
+///
+/// This detects features via environment variables set by Cargo (e.g.
+/// `CARGO_FEATURE_FOO`). If any feature env vars are present, `optional_features`
+/// must contain a parsed `[features]` table so we can map env vars back to the
+/// feature names used in the manifest.
 pub fn get_active_features(optional_features: Option<&toml::Table>) -> Result<Vec<String>, String> {
     let features_env = std::env::vars()
         .filter(|(var, _)| var.starts_with("CARGO_FEATURE_"))

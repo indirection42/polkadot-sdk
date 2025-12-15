@@ -10,8 +10,15 @@ use crate::{
 
 /// The execution context for extensions.
 ///
-/// This struct provides the context for executing extensions.
-/// It includes the invoke source and user data.
+/// This context is used by [`pvq_executor::PvqExecutor`] to register the `host_call` host function.
+///
+/// `host_call`:
+/// - reads the call bytes from guest memory,
+/// - checks permissions via [`PermissionController`], then
+/// - dispatches the call via the macro-generated [`CallDataTuple`] dispatcher.
+///
+/// On success, it allocates guest memory for the SCALE-encoded return value and returns a packed
+/// `u64` containing `(len << 32) | ptr`.
 pub struct Context<C: CallDataTuple, P: PermissionController> {
     /// The source of the invocation.
     invoke_source: InvokeSource,
@@ -24,9 +31,7 @@ pub struct Context<C: CallDataTuple, P: PermissionController> {
 impl<C: CallDataTuple, P: PermissionController> Context<C, P> {
     /// Creates a new context.
     ///
-    /// # Arguments
-    ///
-    /// * `invoke_source`: The source of the invocation.
+    /// `invoke_source` is forwarded to the [`PermissionController`] when handling `host_call`.
     pub fn new(invoke_source: InvokeSource) -> Self {
         Self {
             invoke_source,

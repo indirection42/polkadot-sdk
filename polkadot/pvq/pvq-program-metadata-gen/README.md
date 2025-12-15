@@ -1,6 +1,10 @@
 # PVQ Program Metadata Generator
 
-A command-line tool for generating metadata for PVQ programs. This tool extracts metadata from your PVQ program source code, allowing the UI to know about your program's metadata.
+A command-line tool for generating metadata for PVQ programs.
+
+This tool parses your PVQ program source (`src/main.rs`), finds the `#[program]` module,
+collects functions annotated with `#[program::entrypoint]` and `#[program::extension_fn(...)]`,
+then compiles and runs a temporary crate that writes metadata artifacts to disk.
 
 ## Installation
 
@@ -21,7 +25,14 @@ pvq-program-metadata-gen --crate-path /path/to/your/crate --output-dir /path/to/
 ### Arguments
 
 - `--crate-path, -c`: Path to the crate directory containing a PVQ program
-- `--output-dir, -o`: Output directory for the metadata file, typically `METADATA_OUTPUT_DIR` environment variable read by `build.rs`
+- `--output-dir, -o`: Output directory for the metadata files (typically from a `METADATA_OUTPUT_DIR` env var in `build.rs`)
+- `--manifest-path, -m`: Optional `Cargo.toml` to use for the temporary generator crate. Use this if your program module depends on crates that are not in the default minimal manifest.
+- `--target`: Optional target triple for `cargo run --target ...`
+
+### Important notes
+
+- The tool expects your PVQ program source at `src/main.rs` (relative to `--crate-path`).
+- The output filenames are based on `CARGO_PKG_NAME` (e.g. `my-program-metadata.json`). When run from a Cargo `build.rs`, Cargo provides this variable automatically. If you run the tool manually, set it yourself (for example: `CARGO_PKG_NAME=my-program pvq-program-metadata-gen ...`).
 
 ## Integration with Build Scripts
 
@@ -61,7 +72,7 @@ The tool:
 
 1. Reads the source code of your PVQ program
 2. Generates metadata generation code
-3. Creates a temporary crate that store the metadata generation code
-4. Compiles and runs the temporary crate using the same conditions as your original crate
+3. Creates a temporary crate that stores the metadata generation code
+4. Compiles and runs the temporary crate (optionally with the same active feature flags)
 
-The metadata includes information about function names, parameter types, and return types, allowing the UI to know about your program's metadata.
+The metadata includes function names, parameter types, and return types, so downstream tooling (for example UI code) can understand the PVQ program’s surface.

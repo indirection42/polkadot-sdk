@@ -1,7 +1,11 @@
 pub trait MutItemAttrs {
     fn mut_item_attrs(&mut self) -> Option<&mut Vec<syn::Attribute>>;
 }
-/// Take the first item attribute (e.g. attribute like `#[pvq..]`) and decode it to `Attr`
+/// Removes and returns the first `#[program::...]` attribute from an AST node (if any).
+///
+/// This helper is used while walking the PVQ `#[program]` module: items that have
+/// a `#[program::entrypoint]` or `#[program::extension_fn(...)]` attribute are
+/// classified and recorded as metadata; everything else is kept as-is.
 pub(crate) fn take_first_program_attr(item: &mut impl MutItemAttrs) -> syn::Result<Option<syn::Attribute>> {
     let Some(attrs) = item.mut_item_attrs() else {
         return Ok(None);

@@ -1,4 +1,4 @@
-//! This crate defines the runtime API for the PVQ module.
+#![doc = include_str!("../README.md")]
 #![cfg_attr(not(feature = "std"), no_std)]
 
 extern crate alloc;
@@ -7,21 +7,28 @@ use alloc::vec::Vec;
 use pvq_primitives::PvqResult;
 
 sp_api::decl_runtime_apis! {
-    /// The runtime API for the PVQ module.
-    pub trait PvqApi {
-        /// Executes a PVQ query.
-        ///
-        /// # Arguments
-        ///
-        /// * `program`: The PVQ program binary.
-        /// * `args`: The SCALE-encoded query arguments.
-        /// * `gas_limit`: An optional gas limit for the query execution. If `None`, the execution is constrained by the default time boundary.
-        ///
-        /// # Returns
-        ///
-        /// The result of the PVQ query.
-        fn execute_query(program: Vec<u8>, args: Vec<u8>, gas_limit: Option<i64>) -> PvqResult;
-        /// Returns the metadata of the PVQ extensions.
-        fn metadata() -> Vec<u8>;
-    }
+	/// Runtime API for PVQ (PolkaVM Query).
+	pub trait PvqApi {
+		/// Execute a PVQ program with SCALE-encoded call data.
+		///
+		/// # Arguments
+		///
+		/// * `program`: PolkaVM bytecode of the guest program.
+		/// * `args`: SCALE-encoded call data for the PVQ guest ABI.
+		///   See the crate-level docs for the expected layout.
+		/// * `gas_limit`: Optional execution gas limit. If `None`, the runtime applies its
+		///   default limit/boundary.
+		///
+		/// # Returns
+		///
+		/// A [`PvqResult`], where `Ok` contains the guest's response bytes and `Err` indicates
+		/// execution or validation failure.
+		fn execute_query(program: Vec<u8>, args: Vec<u8>, gas_limit: Option<i64>) -> PvqResult;
+
+		/// Return PVQ extensions metadata as an opaque byte blob.
+		///
+		/// The encoding and schema are defined by the runtime. See the crate-level docs for a
+		/// recommended structure.
+		fn metadata() -> Vec<u8>;
+	}
 }

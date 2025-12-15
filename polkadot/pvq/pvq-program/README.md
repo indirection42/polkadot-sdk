@@ -26,7 +26,10 @@ mod my_program {
 
     // Replace extension_id/fn_index with values that match your runtime
     #[program::extension_fn(extension_id = 123u64, fn_index = 0)]
-    fn total_supply(asset: AssetId) -> Balance {}
+    fn total_supply(asset: AssetId) -> Balance {
+        // The macro expands this into a host call; the body is a placeholder.
+        unimplemented!()
+    }
 
     #[program::entrypoint]
     fn query(asset: AssetId) -> Balance {

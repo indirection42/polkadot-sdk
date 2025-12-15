@@ -1,15 +1,47 @@
+// Copyright (C) Parity Technologies (UK) Ltd.
+// SPDX-License-Identifier: Apache-2.0
+
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// 	http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+//! PVQ integration for the Asset Hub Westend runtime.
+//!
+//! This module showcases how to integrate runtime functionality into PVQ (PolkaVM Query) by
+//! providing an example extension implementations (e.g. swap quoting and asset metadata lookup),
+//! plus helpers to execute PVQ programs and expose extension metadata to clients.
+//! Navigate to the PVQ crates (in this repo under `polkadot/pvq/`): [`pvq_runtime_api`],
+//! [`pvq_extension`], [`pvq_executor`], [`pvq_primitives`].
+
 use codec::{Decode, Encode};
 use pvq_extension::{extensions_impl, metadata::Metadata, ExtensionsExecutor, InvokeSource};
 use scale_info::TypeInfo;
 
+/// Basic metadata about an asset as returned through PVQ extensions.
 #[derive(Debug, Clone, PartialEq, Eq, Encode, Decode, TypeInfo)]
 pub struct AssetInfo {
+	/// SCALE-encoded identifier for the asset (runtime-specific).
 	pub asset_id: crate::Vec<u8>,
+	/// Human-readable name as raw bytes (typically UTF-8).
 	pub name: crate::Vec<u8>,
+	/// Ticker/symbol as raw bytes (typically UTF-8).
 	pub symbol: crate::Vec<u8>,
+	/// Number of decimal places used to represent balances of this asset.
 	pub decimals: u8,
 }
 
+/// PVQ extension implementations exposed by this runtime.
+///
+/// This currently provides swap quoting helpers and asset metadata lookup across the native token,
+/// trust-backed assets, and foreign assets.
 #[extensions_impl]
 pub mod extensions {
 	use alloc::collections::btree_map::BTreeMap;
@@ -223,6 +255,10 @@ pub mod extensions {
 	}
 }
 
+/// Execute a PVQ program with this runtime's extensions.
+///
+/// The `args` bytes are passed through to the PVQ executor, and `gas_limit` (when provided) limits
+/// execution according to PVQ rules.
 pub fn execute_query(program: &[u8], args: &[u8], gas_limit: i64) -> pvq_primitives::PvqResult {
 	let mut executor =
 		ExtensionsExecutor::<extensions::Extensions, ()>::new(InvokeSource::RuntimeAPI);
@@ -230,6 +266,7 @@ pub fn execute_query(program: &[u8], args: &[u8], gas_limit: i64) -> pvq_primiti
 	result
 }
 
+/// Return PVQ extension metadata for clients.
 pub fn metadata() -> Metadata {
 	extensions::metadata()
 }

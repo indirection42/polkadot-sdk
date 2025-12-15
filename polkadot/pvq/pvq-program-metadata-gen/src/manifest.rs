@@ -1,4 +1,8 @@
-/// Creates a Cargo.toml file for the metadata generator
+/// Builds a `Cargo.toml` for the temporary metadata-generator crate.
+///
+/// The generated crate is executed via `cargo run` to write metadata artifacts.
+/// Optionally, a `[features]` table can be embedded so the temp crate can be
+/// built with the same feature flags as the original program crate.
 pub fn create_manifest(features: Option<&toml::Table>) -> String {
     // Create a basic Cargo.toml for the temp crate
     format!(

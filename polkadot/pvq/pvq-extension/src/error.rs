@@ -1,10 +1,10 @@
 //! This module defines the error types for the extension system.
-// TODO: contain source error
 use crate::DispatchError;
 use codec::Error as CodecError;
 
 /// The error type for the extension system.
-// Typically will be used as a UserError
+///
+/// This is typically used as the `UserError` for the PVQ executor context.
 #[derive(Debug)]
 #[cfg_attr(feature = "std", derive(thiserror::Error))]
 pub enum ExtensionError {

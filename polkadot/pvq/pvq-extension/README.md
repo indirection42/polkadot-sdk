@@ -20,6 +20,11 @@ Extension framework for PVQ with declarative interfaces, metadata generation, ex
 
 - A portable type registry plus per‑extension function signatures (names, inputs, output). Useful to serve from your runtime’s `metadata()`.
 
+### Where to look for an example
+
+- This repository contains a full integration example at
+  `cumulus/parachains/runtimes/assets/asset-hub-westend/src/pvq.rs`.
+
 ### Build
 
 ```bash
